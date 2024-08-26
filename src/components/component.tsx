@@ -3,6 +3,8 @@
  * @see https://v0.dev/t/Q55ucDeSkHI
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
+"use client";
+
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
@@ -37,20 +39,35 @@ export default function Component() {
     setFormData({ ...formData, [id]: value[0] })
   }
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const response = await fetch('/api/wordware', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      router.push(`/excuse?message=${encodeURIComponent(data.message)}`)
+    }
+  }
+
   return (
     <div className="flex min-h-[100dvh] flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-md space-y-6">
         <h1 className="text-center text-4xl font-bold tracking-tight text-foreground sm:text-5xl">Excuse Generator!</h1>
         <Card className="rounded-2xl">
-          <CardContent className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit}>
+            <CardContent className="grid gap-4">
+              <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="context">Context</Label>
-                <Textarea id="context" placeholder="Enter context" className="rounded-2xl" />
+                <Textarea id="context" placeholder="Enter context" className="rounded-2xl" onChange={handleInputChange} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="outcome">Desired Outcome</Label>
-                <Textarea id="outcome" placeholder="Enter outcome of excuse" className="rounded-2xl" />
+                <Textarea id="outcome" placeholder="Enter outcome of excuse" className="rounded-2xl" onChange={handleInputChange} />
               </div>
             </div>
             <div className="space-y-2">
@@ -94,17 +111,26 @@ export default function Component() {
                   max={10}
                   defaultValue={[1]}
                   className="h-6 rounded-2xl"
+                  onValueChange={(value) => handleSliderChange("seriousness", value)}
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="ridiculousness">Ridiculousness of Excuse</Label>
-                <Slider id="ridiculousness" min={1} max={10} defaultValue={[1]} className="h-6 rounded-2xl" />
+                <Slider
+                  id="ridiculousness"
+                  min={1}
+                  max={10}
+                  defaultValue={[1]}
+                  className="h-6 rounded-2xl"
+                  onValueChange={(value) => handleSliderChange("ridiculousness", value)}
+                />
               </div>
             </div>
           </CardContent>
           <CardFooter className="flex justify-center">
-            <Button className="rounded-2xl">Generate Excuse</Button>
+            <Button className="rounded-2xl" onClick={handleSubmit}>Generate Excuse </Button>
           </CardFooter>
+           </form>
         </Card>
       </div>
     </div>
