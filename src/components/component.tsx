@@ -18,17 +18,25 @@ import { Button } from "@/components/ui/button"
 export default function Component() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    context: "",
-    outcome: "",
+    context: "n_a",
+    outcome: "n_a",
     style: "text",
-    user_name: "",
-    boss_name: "",
+    user_name: "n_a",
+    boss_name: "n_a",
     severity: 1,
     ridiculousness: 1
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value })
+    const { id, value } = e.target;
+    if (id === 'user_name' || id === 'boss_name' || id === 'context' || id === 'outcome') {
+      setFormData(prevData => ({
+        ...prevData,
+        [id]: value === '' ? 'n_a' : value
+      }));
+    } else {
+      setFormData(prevData => ({ ...prevData, [id]: value }));
+    }
   }
 
   const handleSelectChange = (value: string) => {
@@ -63,11 +71,23 @@ export default function Component() {
               <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="context">Context</Label>
-                <Textarea id="context" placeholder="Enter context" className="rounded-2xl" onChange={handleInputChange} />
+                <Textarea 
+                  id="context"
+                  placeholder="Enter context"
+                  className="rounded-2xl"
+                  onChange={handleInputChange}
+                  value={formData.context === 'n_a' ? '' : formData.context}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="outcome">Desired Outcome</Label>
-                <Textarea id="outcome" placeholder="Enter outcome of excuse" className="rounded-2xl" onChange={handleInputChange} />
+                <Textarea
+                  id="outcome"
+                  placeholder="Enter outcome of excuse"
+                  className="rounded-2xl"
+                  onChange={handleInputChange}
+                  value={formData.outcome === 'n_a' ? '' : formData.outcome}
+                />
               </div>
             </div>
             <div className="space-y-2">
@@ -89,20 +109,29 @@ export default function Component() {
                   <SelectItem value="letter" className="rounded-2xl">
                     Letter
                   </SelectItem>
-                  <SelectItem value="all" className="rounded-2xl">
-                    All 3
-                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="user_name">Your Name</Label>
-                <Input id="user_name" placeholder="Enter your name" className="rounded-2xl" onChange={handleInputChange} />
+                <Input
+                  id="user_name"
+                  placeholder="Enter your name"
+                  className="rounded-2xl"
+                  onChange={handleInputChange}
+                  value={formData.user_name === 'n_a' ? '' : formData.user_name}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="boss_name">Boss's Name</Label>
-                <Input id="boss_name" placeholder="Enter boss's name" className="rounded-2xl" onChange={handleInputChange} />
+                <Input
+                  id="boss_name"
+                  placeholder="Enter boss's name"
+                  className="rounded-2xl"
+                  onChange={handleInputChange}
+                  value={formData.boss_name === 'n_a' ? '' : formData.boss_name}
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
