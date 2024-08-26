@@ -20,10 +20,10 @@ export default function Component() {
   const [formData, setFormData] = useState({
     context: "",
     outcome: "",
-    format: "text",
-    name: "",
-    boss: "",
-    seriousness: 1,
+    style: "text",
+    user_name: "",
+    boss_name: "",
+    severity: 1,
     ridiculousness: 1
   });
 
@@ -32,7 +32,7 @@ export default function Component() {
   }
 
   const handleSelectChange = (value: string) => {
-    setFormData({ ...formData, format: value })
+    setFormData({ ...formData, style: value })
   }
 
   const handleSliderChange = (id: string, value: number[]) => {
@@ -71,10 +71,13 @@ export default function Component() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="format">Format</Label>
-              <Select defaultValue="text">
-                <SelectTrigger id="format" className="rounded-2xl">
-                  <SelectValue placeholder="Select format" />
+              <Label htmlFor="style">style</Label>
+              <Select
+                defaultValue="text"
+                onValueChange={(value) => handleSelectChange(value)}
+              >
+                <SelectTrigger id="style" className="rounded-2xl">
+                  <SelectValue placeholder="Select style" />
                 </SelectTrigger>
                 <SelectContent className="rounded-2xl">
                   <SelectItem value="text" className="rounded-2xl">
@@ -94,24 +97,24 @@ export default function Component() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Your Name</Label>
-                <Input id="name" placeholder="Enter your name" className="rounded-2xl" />
+                <Label htmlFor="user_name">Your Name</Label>
+                <Input id="user_name" placeholder="Enter your name" className="rounded-2xl" onChange={handleInputChange} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="boss">Boss's Name</Label>
-                <Input id="boss" placeholder="Enter boss's name" className="rounded-2xl" />
+                <Label htmlFor="boss_name">Boss's Name</Label>
+                <Input id="boss_name" placeholder="Enter boss's name" className="rounded-2xl" onChange={handleInputChange} />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="seriousness">Seriousness of Excuse</Label>
+                <Label htmlFor="severity">Severity of Excuse</Label>
                 <Slider
-                  id="seriousness"
+                  id="severity"
                   min={1}
                   max={10}
                   defaultValue={[1]}
                   className="h-6 rounded-2xl"
-                  onValueChange={(value) => handleSliderChange("seriousness", value)}
+                  onValueChange={(value) => handleSliderChange("severity", value)}
                 />
               </div>
               <div className="space-y-2">
